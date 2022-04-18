@@ -1,9 +1,9 @@
-﻿using Zenject;
-using System.IO;
-using IPA.Loader;
-using System.Threading.Tasks;
-using BeatSaberMarkupLanguage.Attributes;
+﻿using BeatSaberMarkupLanguage.Attributes;
 using BeatSaberMarkupLanguage.ViewControllers;
+using IPA.Loader;
+using System.IO;
+using System.Threading.Tasks;
+using Zenject;
 
 namespace DiBris.UI
 {
@@ -21,11 +21,11 @@ namespace DiBris.UI
         [UIValue("info-text")]
         protected string InfoText
         {
-            get => _infoText;
+            get => this._infoText;
             set
             {
-                _infoText = value;
-                NotifyPropertyChanged();
+                this._infoText = value;
+                this.NotifyPropertyChanged();
             }
         }
 
@@ -33,15 +33,14 @@ namespace DiBris.UI
         protected async Task Parsed()
         {
             // Load Text Asset (Asynchronously)
-            Stream stream = _pluginMetadata.Assembly.GetManifestResourceStream($"{nameof(DiBris)}.Resources.info.txt");
-            StreamReader sr = new StreamReader(stream);
-            string text = await sr.ReadToEndAsync();
+            var stream = this._pluginMetadata.Assembly.GetManifestResourceStream($"{nameof(DiBris)}.Resources.info.txt");
+            var sr = new StreamReader(stream);
+            var text = await sr.ReadToEndAsync();
             sr.Dispose();
             stream.Dispose();
 
-            var user = await _platformUserModel.GetUserInfo();
-            switch (user.platformUserId)
-            {
+            var user = await this._platformUserModel.GetUserInfo();
+            switch (user.platformUserId) {
                 case "76561198064659288":
                     text += "hi denyah";
                     break;
@@ -52,7 +51,7 @@ namespace DiBris.UI
                     text += "dibris? i hardly even know her!";
                     break;
             }
-            InfoText = text;
+            this.InfoText = text;
         }
     }
 }

@@ -1,5 +1,5 @@
-﻿using Zenject;
-using BeatSaberMarkupLanguage.Attributes;
+﻿using BeatSaberMarkupLanguage.Attributes;
+using Zenject;
 
 namespace DiBris.UI.Settings
 {
@@ -15,36 +15,36 @@ namespace DiBris.UI.Settings
         [UIValue("lifetime")]
         protected float Lifetime
         {
-            get => _config.LifetimeMultiplier;
-            set => _config.LifetimeMultiplier = value;
+            get => this._config.LifetimeMultiplier;
+            set => this._config.LifetimeMultiplier = value;
         }
 
         [UIValue("velocity")]
         protected float Velocity
         {
-            get => _config.VelocityMultiplier;
-            set => _config.VelocityMultiplier = value;
+            get => this._config.VelocityMultiplier;
+            set => this._config.VelocityMultiplier = value;
         }
 
         [UIValue("gravity")]
         protected float Gravity
         {
-            get => _config.GravityMultiplier;
-            set => _config.GravityMultiplier = value;
+            get => this._config.GravityMultiplier;
+            set => this._config.GravityMultiplier = value;
         }
 
         [UIValue("rotation")]
         protected float Rotation
         {
-            get => _config.RotationMultiplier;
-            set => _config.RotationMultiplier = value;
+            get => this._config.RotationMultiplier;
+            set => this._config.RotationMultiplier = value;
         }
 
         [UIValue("scale")]
         protected float Scale
         {
-            get => _config.Scale;
-            set => _config.Scale = value;
+            get => this._config.Scale;
+            set => this._config.Scale = value;
         }
 
         [UIAction("percent-formatter")]

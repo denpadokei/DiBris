@@ -5,11 +5,11 @@
   "author": "Auros",
   "version": "1.0.2",
   "description": "Customize your debris in Beat Saber!",
-  "gameVersion": "1.14.0",
+  "gameVersion": "1.21.0",
   "dependsOn": {
-    "BSIPA": "^4.1.6",
-    "SiraUtil": "^2.3.1",
-    "BeatSaberMarkupLanguage": "^1.4.1"
+    "BSIPA": "^4.2.2",
+    "SiraUtil": "^3.0.5",
+    "BeatSaberMarkupLanguage": "^1.5.0"
   },
   "loadAfter": [ "ChromaToggle" ]
 }

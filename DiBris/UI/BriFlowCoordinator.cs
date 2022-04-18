@@ -1,6 +1,6 @@
-﻿using HMUI;
+﻿using BeatSaberMarkupLanguage;
+using HMUI;
 using Zenject;
-using BeatSaberMarkupLanguage;
 
 namespace DiBris.UI
 {
@@ -17,24 +17,26 @@ namespace DiBris.UI
         [Inject]
         public void Construct(Config config, BriMainView briMainView, BriInfoView briInfoView, BriProfileView briProfileView, BriSettingsView briSettingsView, MainFlowCoordinator mainFlowCoordinator)
         {
-            _config = config;
-            _briMainView = briMainView;
-            _briInfoView = briInfoView;
-            _briProfileView = briProfileView;
-            _briSettingsView = briSettingsView;
-            _mainFlowCoordinator = mainFlowCoordinator;
+            this._config = config;
+            this._briMainView = briMainView;
+            this._briInfoView = briInfoView;
+            this._briProfileView = briProfileView;
+            this._briSettingsView = briSettingsView;
+            this._mainFlowCoordinator = mainFlowCoordinator;
         }
 
         protected override void DidActivate(bool firstActivation, bool addedToHierarchy, bool _)
         {
-            if (firstActivation)
-            {
-                showBackButton = true;
-                SetTitle(nameof(DiBris));
+            if (firstActivation) {
+                this.showBackButton = true;
+                this.SetTitle(nameof(DiBris));
             }
-            if (addedToHierarchy) ProvideInitialViewControllers(_briMainView);
-            _briMainView.EventNavigated += NavigationReceived;
-            _config.Updated += Changed;
+            if (addedToHierarchy) {
+                this.ProvideInitialViewControllers(this._briMainView);
+            }
+
+            this._briMainView.EventNavigated += this.NavigationReceived;
+            this._config.Updated += this.Changed;
         }
 
         private void Changed(Config _)
@@ -44,48 +46,46 @@ namespace DiBris.UI
 
         private void NavigationReceived(NavigationEvent navEvent)
         {
-            switch (navEvent)
-            {
+            switch (navEvent) {
                 case NavigationEvent.Info:
-                    SetLeftScreenViewController(_briInfoView, ViewController.AnimationType.In);
-                    SetRightScreenViewController(null, ViewController.AnimationType.Out);
+                    this.SetLeftScreenViewController(this._briInfoView, ViewController.AnimationType.In);
+                    this.SetRightScreenViewController(null, ViewController.AnimationType.Out);
                     break;
                 case NavigationEvent.Profile:
-                    SetLeftScreenViewController(null, ViewController.AnimationType.Out);
-                    SetRightScreenViewController(_briProfileView, ViewController.AnimationType.In);
+                    this.SetLeftScreenViewController(null, ViewController.AnimationType.Out);
+                    this.SetRightScreenViewController(this._briProfileView, ViewController.AnimationType.In);
                     break;
                 case NavigationEvent.Settings:
-                    SetLeftScreenViewController(null, ViewController.AnimationType.Out);
-                    SetRightScreenViewController(_briSettingsView, ViewController.AnimationType.In);
+                    this.SetLeftScreenViewController(null, ViewController.AnimationType.Out);
+                    this.SetRightScreenViewController(this._briSettingsView, ViewController.AnimationType.In);
                     break;
                 default:
-                    SetLeftScreenViewController(null, ViewController.AnimationType.Out);
-                    SetRightScreenViewController(null, ViewController.AnimationType.Out);
+                    this.SetLeftScreenViewController(null, ViewController.AnimationType.Out);
+                    this.SetRightScreenViewController(null, ViewController.AnimationType.Out);
                     break;
             }
-            if (navEvent == NavigationEvent.Reset)
-            {
-                var version = _config.Version;
-                _config.CopyFrom(new Config
+            if (navEvent == NavigationEvent.Reset) {
+                var version = this._config.Version;
+                this._config.CopyFrom(new Config
                 {
                     Version = version
                 });
-                _config.Save();
-                _config.Changed();
+                this._config.Save();
+                this._config.Changed();
             }
         }
 
         protected override void DidDeactivate(bool removedFromHierarchy, bool screenSystemDisabling)
         {
             base.DidDeactivate(removedFromHierarchy, screenSystemDisabling);
-            _briMainView.EventNavigated -= NavigationReceived;
-            _config.Updated -= Changed;
-            _config.Save();
+            this._briMainView.EventNavigated -= this.NavigationReceived;
+            this._config.Updated -= this.Changed;
+            this._config.Save();
         }
 
         protected override void BackButtonWasPressed(ViewController _)
         {
-            _mainFlowCoordinator.DismissFlowCoordinator(this);
+            this._mainFlowCoordinator.DismissFlowCoordinator(this);
         }
 
         public enum NavigationEvent

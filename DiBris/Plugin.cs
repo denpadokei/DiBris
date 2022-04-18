@@ -1,13 +1,13 @@
-﻿using IPA;
-using SiraUtil;
+﻿using DiBris.Components;
+using DiBris.Managers;
 using DiBris.UI;
+using IPA;
+using IPA.Config.Stores;
 using IPA.Loader;
 using IPA.Utilities;
-using DiBris.Managers;
-using SiraUtil.Zenject;
-using DiBris.Components;
-using IPA.Config.Stores;
 using SiraUtil.Attributes;
+using SiraUtil.Zenject;
+using Zenject;
 using Conf = IPA.Config.Config;
 using IPALogger = IPA.Logging.Logger;
 
@@ -22,21 +22,17 @@ namespace DiBris
         public Plugin(Conf conf, IPALogger log, Zenjector zenjector, PluginMetadata metadata)
         {
             var config = conf.Generated<Config>();
-            config.Version = metadata.Version;
+            config.Version = metadata.HVersion;
+            zenjector.UseLogger(log);
+            zenjector.Install(Location.App, Container =>
+            {
+                Container.BindInstance(metadata).WithId(nameof(DiBris)).AsCached();
+                Container.Bind<ProfileManager>().AsSingle();
+                Container.BindInstance(config).AsSingle();
+            });
 
             zenjector
-                .On<PCAppInit>()
-                .Pseudo(Container =>
-                {
-                    Container.BindInstance(metadata).WithId(nameof(DiBris)).AsCached();
-                    Container.Bind<ProfileManager>().AsSingle();
-                    Container.BindInstance(config).AsSingle();
-                    Container.BindLoggerAsSiraLogger(log);
-                });
-
-            zenjector
-                .On<MenuInstaller>()
-                .Pseudo(Container =>
+                .Install(Location.Menu, Container =>
                 {
                     Container.Bind<UIParser>().AsSingle();
                     Container.BindInterfacesTo<MenuButtonManager>().AsSingle();
@@ -44,19 +40,19 @@ namespace DiBris
                     Container.Bind<BriInfoView>().FromNewComponentAsViewController().AsSingle();
                     Container.Bind<BriProfileView>().FromNewComponentAsViewController().AsSingle();
                     Container.Bind<BriSettingsView>().FromNewComponentAsViewController().AsSingle();
-                    Container.Bind<BriFlowCoordinator>().FromNewComponentOnNewGameObject(nameof(BriFlowCoordinator)).AsSingle();
+                    Container.Bind<BriFlowCoordinator>().FromNewComponentOnNewGameObject().AsSingle();
                 });
 
             zenjector
-                .On<GameplayCoreInstaller>()
-                .Pseudo((_) => { })
-                .Mutate<NoteDebrisSpawner>((ctx, spawner) =>
+                .Install(Location.Player, Container => 
                 {
-                    var diSpawner = spawner.Upgrade<NoteDebrisSpawner, DiSpawner>();
-                    var effectSpawner = ctx.GetInjected<NoteCutCoreEffectsSpawner>();
-                    DebrisSpawner(ref effectSpawner) = diSpawner;
-                    ctx.Container.QueueForInject(diSpawner);
-                    ctx.AddInjectable(diSpawner);
+                    Container.Bind<UIParser>().AsSingle();
+                    Container.BindInterfacesTo<MenuButtonManager>().AsSingle();
+                    Container.Bind<BriMainView>().FromNewComponentAsViewController().AsSingle();
+                    Container.Bind<BriInfoView>().FromNewComponentAsViewController().AsSingle();
+                    Container.Bind<BriProfileView>().FromNewComponentAsViewController().AsSingle();
+                    Container.Bind<BriSettingsView>().FromNewComponentAsViewController().AsSingle();
+                    Container.Bind<BriFlowCoordinator>().FromNewComponentOnNewGameObject().AsSingle();
                 });
         }
 

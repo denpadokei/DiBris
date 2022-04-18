@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using SiraUtil.Extras;
 using Zenject;
 
 namespace DiBris.Managers
@@ -13,27 +10,26 @@ namespace DiBris.Managers
 
         [Inject]
         private readonly Config config = null!;
-        
+
         private bool _done;
 
         public async void Initialize()
         {
-            await SiraUtil.Utilities.AwaitSleep(500);
-            config.RemoveDebris = false;
-            config.VelocityMultiplier = 1f;
-            config.GravityMultiplier = 1f;
-            config.LifetimeMultiplier = 1f;
+            await Utilities.AwaitSleep(500);
+            this.config.RemoveDebris = false;
+            this.config.VelocityMultiplier = 1f;
+            this.config.GravityMultiplier = 1f;
+            this.config.LifetimeMultiplier = 1f;
         }
 
         public void Tick()
         {
-            if (timeSync.songTime >= 22f && !_done)
-            {
+            if (this.timeSync.songTime >= 22f && !this._done) {
 
-                config.VelocityMultiplier = 0f;
-                config.GravityMultiplier = 0f;
-                config.LifetimeMultiplier = 10f;
-                _done = true;
+                this.config.VelocityMultiplier = 0f;
+                this.config.GravityMultiplier = 0f;
+                this.config.LifetimeMultiplier = 10f;
+                this._done = true;
             }
         }
     }

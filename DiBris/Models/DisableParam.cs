@@ -1,6 +1,6 @@
-﻿using System;
-using IPA.Config.Stores.Attributes;
+﻿using IPA.Config.Stores.Attributes;
 using IPA.Config.Stores.Converters;
+using System;
 
 namespace DiBris.Models
 {
@@ -14,7 +14,7 @@ namespace DiBris.Models
         public bool DoNJS { get; set; }
         public bool DoNPS { get; set; }
         public bool DoLength { get; set; }
-    
+
         [UseConverter(typeof(EnumConverter<DisableMode>))]
         public DisableMode Mode { get; set; }
     }

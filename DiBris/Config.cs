@@ -1,12 +1,12 @@
-﻿using System;
-using UnityEngine;
-using DiBris.Models;
+﻿using DiBris.Models;
 using IPA.Config.Stores;
-using SiraUtil.Converters;
-using System.Collections.Generic;
-using IPA.Config.Stores.Converters;
 using IPA.Config.Stores.Attributes;
+using IPA.Config.Stores.Converters;
+using SiraUtil.Converters;
+using System;
+using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using UnityEngine;
 
 [assembly: InternalsVisibleTo(GeneratedStore.AssemblyVisibilityTarget)]
 namespace DiBris
@@ -15,10 +15,10 @@ namespace DiBris
     internal class Config
     {
         [Ignore]
-        public Action<Config>? Updated;
+        public Action<Config> Updated;
 
         [UseConverter(typeof(VersionConverter))]
-        public SemVer.Version Version { get; set; } = new SemVer.Version("0.0.0");
+        public Hive.Versioning.Version Version { get; set; } = new Hive.Versioning.Version("0.0.0");
 
         // Initial Design
 
@@ -35,7 +35,7 @@ namespace DiBris
         public float AbsolutePositionOffsetZ { get; set; } = 0f;
 
         [Ignore]
-        public Vector3 AbsolutePositionOffset => new Vector3(AbsolutePositionOffsetX, AbsolutePositionOffsetY, AbsolutePositionOffsetZ);
+        public Vector3 AbsolutePositionOffset => new Vector3(this.AbsolutePositionOffsetX, this.AbsolutePositionOffsetY, this.AbsolutePositionOffsetZ);
 
         public float AbsolutePositionScale { get; set; } = 1f;
 
@@ -59,6 +59,9 @@ namespace DiBris
         // Virtual Config State Methods
         public virtual void Save() { }
         public virtual void CopyFrom(Config _) { }
-        public virtual void Changed() => Updated?.Invoke(this);
+        public virtual void Changed()
+        {
+            this.Updated?.Invoke(this);
+        }
     }
 }

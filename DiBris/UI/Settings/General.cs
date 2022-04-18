@@ -1,11 +1,11 @@
-﻿using System;
-using Zenject;
-using UnityEngine;
+﻿using BeatSaberMarkupLanguage.Attributes;
+using BeatSaberMarkupLanguage.Components;
 using DiBris.Managers;
+using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using BeatSaberMarkupLanguage.Attributes;
-using BeatSaberMarkupLanguage.Components;
+using UnityEngine;
+using Zenject;
 
 namespace DiBris.UI.Settings
 {
@@ -30,50 +30,47 @@ namespace DiBris.UI.Settings
         [UIValue("profile-name")]
         protected string ProfileName
         {
-            get => _config.Name;
-            set => _config.Name = value;
+            get => this._config.Name;
+            set => this._config.Name = value;
         }
 
         [UIValue("remove-all-debris")]
         protected bool RemoveAllDebris
         {
-            get => _config.RemoveDebris;
-            set => _config.RemoveDebris = value;
+            get => this._config.RemoveDebris;
+            set => this._config.RemoveDebris = value;
         }
 
         public override async void Refresh()
         {
-            mirrorTable.data.Clear();
-            mirrorRoot.gameObject.SetActive(true);
-            foreach (Transform t in mirrorTable.tableView.contentTransform)
-            {
+            this.mirrorTable.data.Clear();
+            this.mirrorRoot.gameObject.SetActive(true);
+            foreach (Transform t in this.mirrorTable.tableView.contentTransform) {
                 UnityEngine.Object.Destroy(t.gameObject);
             }
-            foreach (var mirror in _config.MirrorConfigs)
-            {
-                mirrorTable.data.Add(new Cell(mirror, true, MirrorChange));
+            foreach (var mirror in this._config.MirrorConfigs) {
+                this.mirrorTable.data.Add(new Cell(mirror, true, this.MirrorChange));
             }
-            foreach (var config in await _profileManager.AllSubProfiles())
-            {
-                if (!_config.MirrorConfigs.Contains(config.Name) && _config.Name != config.Name)
-                {
-                    mirrorTable.data.Add(new Cell(config.Name, false, MirrorChange));
+            foreach (var config in await this._profileManager.AllSubProfiles()) {
+                if (!this._config.MirrorConfigs.Contains(config.Name) && this._config.Name != config.Name) {
+                    this.mirrorTable.data.Add(new Cell(config.Name, false, this.MirrorChange));
                 }
             }
-            mirrorTable.tableView.ReloadData();
-            if (mirrorTable.data.Count == 0)
-            {
-                mirrorRoot.gameObject.SetActive(false);
+            this.mirrorTable.tableView.ReloadData();
+            if (this.mirrorTable.data.Count == 0) {
+                this.mirrorRoot.gameObject.SetActive(false);
             }
             base.Refresh();
         }
 
         public void MirrorChange(string name, bool state)
         {
-            if (state)
-                _config.MirrorConfigs.Add(name);
-            else
-                _config.MirrorConfigs.Remove(name);
+            if (state) {
+                this._config.MirrorConfigs.Add(name);
+            }
+            else {
+                this._config.MirrorConfigs.Remove(name);
+            }
         }
 
         public class Cell : INotifyPropertyChanged
@@ -85,47 +82,46 @@ namespace DiBris.UI.Settings
             [UIValue("enabled")]
             public bool Enabled
             {
-                get => _enabled;
+                get => this._enabled;
                 set
                 {
-                    _enabled = value;
-                    NotifyPropertyChanged(nameof(Enabled));
-                    NotifyPropertyChanged(nameof(Status));
-                    NotifyPropertyChanged(nameof(StatusColor));
-                    NotifyPropertyChanged(nameof(ToggleString));
+                    this._enabled = value;
+                    this.NotifyPropertyChanged(nameof(this.Enabled));
+                    this.NotifyPropertyChanged(nameof(this.Status));
+                    this.NotifyPropertyChanged(nameof(this.StatusColor));
+                    this.NotifyPropertyChanged(nameof(this.ToggleString));
                 }
             }
 
             [UIValue("status")]
-            public string Status => Enabled ? "✅" : "❌";
+            public string Status => this.Enabled ? "✅" : "❌";
 
             [UIValue("status-color")]
-            public string StatusColor => Enabled ? "lime" : "red";
+            public string StatusColor => this.Enabled ? "lime" : "red";
 
             [UIValue("toggle-string")]
-            public string ToggleString => Enabled ? "-" : "+";
+            public string ToggleString => this.Enabled ? "-" : "+";
 
-            private Action<string, bool> Changed;
-            public event PropertyChangedEventHandler? PropertyChanged;
+            private readonly Action<string, bool> Changed;
+            public event PropertyChangedEventHandler PropertyChanged;
 
             public Cell(string name, bool initialState, Action<string, bool> onStateChange)
             {
-                Name = name;
-                Changed = onStateChange;
-                _enabled = initialState;
+                this.Name = name;
+                this.Changed = onStateChange;
+                this._enabled = initialState;
             }
 
             [UIAction("change-state")]
             protected void ChangedState()
             {
-                Enabled = !Enabled;
-                Changed?.Invoke(Name, Enabled);
+                this.Enabled = !this.Enabled;
+                this.Changed?.Invoke(this.Name, this.Enabled);
             }
 
             protected void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
             {
-                try
-                {
+                try {
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
                 }
                 catch { }

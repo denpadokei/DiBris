@@ -1,5 +1,5 @@
-﻿using Zenject;
-using BeatSaberMarkupLanguage.Attributes;
+﻿using BeatSaberMarkupLanguage.Attributes;
+using Zenject;
 
 namespace DiBris.UI.Settings
 {
@@ -15,32 +15,29 @@ namespace DiBris.UI.Settings
         [UIValue("pos-offset-x")]
         protected float PosOffsetX
         {
-            get => _config.AbsolutePositionOffset.x;
-            set
-            {
-                _config.AbsolutePositionOffsetX = value;
-            }
+            get => this._config.AbsolutePositionOffset.x;
+            set => this._config.AbsolutePositionOffsetX = value;
         }
 
         [UIValue("pos-offset-y")]
         protected float PosOffsetY
         {
-            get => _config.AbsolutePositionOffset.y;
-            set => _config.AbsolutePositionOffsetY = value;
+            get => this._config.AbsolutePositionOffset.y;
+            set => this._config.AbsolutePositionOffsetY = value;
         }
 
         [UIValue("pos-offset-z")]
         protected float PosOffsetZ
         {
-            get => _config.AbsolutePositionOffset.z;
-            set => _config.AbsolutePositionOffsetZ = value;
+            get => this._config.AbsolutePositionOffset.z;
+            set => this._config.AbsolutePositionOffsetZ = value;
         }
 
         [UIValue("pos-scale")]
         protected float PosScale
         {
-            get => _config.AbsolutePositionScale;
-            set => _config.AbsolutePositionScale = value;
+            get => this._config.AbsolutePositionScale;
+            set => this._config.AbsolutePositionScale = value;
         }
 
         [UIAction("percent-formatter")]

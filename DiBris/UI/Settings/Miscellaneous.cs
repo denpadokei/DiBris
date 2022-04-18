@@ -1,7 +1,8 @@
-﻿using Zenject;
+﻿using BeatSaberMarkupLanguage.Attributes;
+using SiraUtil.Extras;
 using System.ComponentModel;
 using System.Threading.Tasks;
-using BeatSaberMarkupLanguage.Attributes;
+using Zenject;
 
 namespace DiBris.UI.Settings
 {
@@ -11,7 +12,7 @@ namespace DiBris.UI.Settings
 
         public override string ContentPath => $"{nameof(DiBris)}.Views.Settings.{nameof(Miscellaneous).ToLower()}.bsml";
 
-        public event PropertyChangedEventHandler? PropertyChanged;
+        public event PropertyChangedEventHandler PropertyChanged;
 
         [Inject]
         protected readonly Config _config = null!;
@@ -19,54 +20,57 @@ namespace DiBris.UI.Settings
         [UIValue("fixate-rotation")]
         protected bool FixateRotation
         {
-            get => _config.FixateRotationToZero;
-            set => _config.FixateRotationToZero = value;
+            get => this._config.FixateRotationToZero;
+            set => this._config.FixateRotationToZero = value;
         }
 
         [UIValue("fixate-zpos")]
         protected bool FixateZPos
         {
-            get => _config.FixateZPos;
-            set => _config.FixateZPos = value;
+            get => this._config.FixateZPos;
+            set => this._config.FixateZPos = value;
         }
 
         [UIValue("do-fixed-lifetime")]
         protected bool DoFixedLifetime
         {
-            get => _config.FixedLifetime;
-            set => _config.FixedLifetime = value;
+            get => this._config.FixedLifetime;
+            set => this._config.FixedLifetime = value;
         }
 
         [UIValue("fixed-lifetime")]
         protected float FixedLifetime
         {
-            get => _config.FixedLifetimeLength;
-            set => _config.FixedLifetimeLength = value;
+            get => this._config.FixedLifetimeLength;
+            set => this._config.FixedLifetimeLength = value;
         }
 
         [UIValue("do-grid-snap")]
         protected bool DoGridSnap
         {
-            get => _config.SnapToGrid;
-            set => _config.SnapToGrid = value;
+            get => this._config.SnapToGrid;
+            set => this._config.SnapToGrid = value;
         }
 
         [UIValue("grid-scale")]
         protected float GridScale
         {
-            get => _config.GridScale;
-            set => _config.GridScale = value;
+            get => this._config.GridScale;
+            set => this._config.GridScale = value;
         }
 
         [UIAction("hidden-prop-change")]
         protected async Task HiddenPropertyChanged(bool _)
         {
-            await SiraUtil.Utilities.AwaitSleep(0);
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(DoGridSnap)));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(DoFixedLifetime)));
+            await Utilities.AwaitSleep(1);
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(this.DoGridSnap)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(this.DoFixedLifetime)));
         }
 
         [UIAction("time-formatter")]
-        protected string TimeFormatter(float value) => $"{value:0.00} seconds";
+        protected string TimeFormatter(float value)
+        {
+            return $"{value:0.00} seconds";
+        }
     }
 }

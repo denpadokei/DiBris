@@ -1,7 +1,7 @@
 ﻿using BeatSaberMarkupLanguage;
 using DiBris.UI;
 using IPA.Loader;
-using SiraUtil.Tools;
+using SiraUtil.Logging;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
@@ -18,26 +18,27 @@ namespace DiBris.Managers
 
         public UIParser(SiraLog siraLog, DiContainer container, [Inject(Id = nameof(DiBris))] PluginMetadata pluginMetadata)
         {
-            _siraLog = siraLog;
-            _container = container;
-            _pluginMetadata = pluginMetadata;
-            _parseables = new List< Parseable>();
+            this._siraLog = siraLog;
+            this._container = container;
+            this._pluginMetadata = pluginMetadata;
+            this._parseables = new List<Parseable>();
         }
 
         public async Task Parse(Parseable parseable)
         {
-            if (_parseables.Contains(parseable))
+            if (this._parseables.Contains(parseable)) {
                 return;
+            }
 
             // Load BSML Content (Asynchronously)
-            Stream stream = _pluginMetadata.Assembly.GetManifestResourceStream(parseable.ContentPath);
-            StreamReader sr = new StreamReader(stream);
-            string content = await sr.ReadToEndAsync();
+            var stream = this._pluginMetadata.Assembly.GetManifestResourceStream(parseable.ContentPath);
+            var sr = new StreamReader(stream);
+            var content = await sr.ReadToEndAsync();
             sr.Dispose();
             stream.Dispose();
 
-            _parseables.Add(parseable);
-            _container.Inject(parseable);
+            this._parseables.Add(parseable);
+            this._container.Inject(parseable);
             BSMLParser.instance.Parse(content, parseable.root.gameObject, parseable);
         }
     }

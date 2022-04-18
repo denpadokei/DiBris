@@ -1,14 +1,14 @@
-﻿using HMUI;
-using Zenject;
-using UnityEngine;
+﻿using BeatSaberMarkupLanguage.Attributes;
+using BeatSaberMarkupLanguage.Components;
+using BeatSaberMarkupLanguage.Parser;
+using BeatSaberMarkupLanguage.ViewControllers;
 using DiBris.Managers;
 using DiBris.UI.Settings;
-using System.Threading.Tasks;
+using HMUI;
 using System.Collections.Generic;
-using BeatSaberMarkupLanguage.Parser;
-using BeatSaberMarkupLanguage.Attributes;
-using BeatSaberMarkupLanguage.Components;
-using BeatSaberMarkupLanguage.ViewControllers;
+using System.Threading.Tasks;
+using UnityEngine;
+using Zenject;
 
 namespace DiBris.UI
 {
@@ -35,54 +35,51 @@ namespace DiBris.UI
         [Inject]
         protected void Construct(Config config, UIParser uiParser, ProfileManager profileManager)
         {
-            _config = config;
-            _uiParser = uiParser;
-            _profileManager = profileManager;
-            settingWindows.Add(new General());
-            settingWindows.Add(new Multipliers());
-            settingWindows.Add(new Positioning());
-            settingWindows.Add(new Conditions());
-            settingWindows.Add(new Miscellaneous());
+            this._config = config;
+            this._uiParser = uiParser;
+            this._profileManager = profileManager;
+            this.settingWindows.Add(new General());
+            this.settingWindows.Add(new Multipliers());
+            this.settingWindows.Add(new Positioning());
+            this.settingWindows.Add(new Conditions());
+            this.settingWindows.Add(new Miscellaneous());
         }
 
         [UIAction("#post-parse")]
         protected async Task Parsed()
         {
-            titleBar.color0 = Color.white;
-            titleBar.color1 = Color.white.ColorWithAlpha(0);
-            titleBar.SetAllDirty();
-            if (settingWindows[0] is Parseable parseable)
-            {
-                await _uiParser.Parse(parseable);
+            this.titleBar.color0 = Color.white;
+            this.titleBar.color1 = Color.white.ColorWithAlpha(0);
+            this.titleBar.SetAllDirty();
+            if (this.settingWindows[0] is Parseable parseable) {
+                await this._uiParser.Parse(parseable);
             }
         }
 
         protected override void DidActivate(bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling)
         {
             base.DidActivate(firstActivation, addedToHierarchy, screenSystemEnabling);
-            tabSelector.textSegmentedControl.didSelectCellEvent += SelectedCell;
+            this.tabSelector.textSegmentedControl.didSelectCellEvent += this.SelectedCell;
 
-            parserParams.EmitEvent("refresh");
-            foreach (IRefreshable refreshable in settingWindows)
+            this.parserParams.EmitEvent("refresh");
+            foreach (IRefreshable refreshable in this.settingWindows) {
                 refreshable.Refresh();
-
-
+            }
         }
 
         private async void SelectedCell(SegmentedControl _, int index)
         {
-            if (settingWindows[index] is Parseable parseable)
-            {
-                await _uiParser.Parse(parseable);
+            if (this.settingWindows[index] is Parseable parseable) {
+                await this._uiParser.Parse(parseable);
             }
         }
 
         protected override async void DidDeactivate(bool removedFromHierarchy, bool screenSystemDisabling)
         {
-            await _profileManager.AllSubProfiles();
-            _profileManager.Save(_config);
+            await this._profileManager.AllSubProfiles();
+            this._profileManager.Save(this._config);
             base.DidDeactivate(removedFromHierarchy, screenSystemDisabling);
-            tabSelector.textSegmentedControl.didSelectCellEvent -= SelectedCell;
+            this.tabSelector.textSegmentedControl.didSelectCellEvent -= this.SelectedCell;
         }
     }
 }

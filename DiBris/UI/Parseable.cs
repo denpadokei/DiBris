@@ -1,6 +1,6 @@
-﻿using UnityEngine;
+﻿using BeatSaberMarkupLanguage.Attributes;
 using BeatSaberMarkupLanguage.Parser;
-using BeatSaberMarkupLanguage.Attributes;
+using UnityEngine;
 
 namespace DiBris.UI
 {
@@ -18,7 +18,7 @@ namespace DiBris.UI
 
         public virtual void Refresh()
         {
-            parserParams?.EmitEvent("update");
+            this.parserParams?.EmitEvent("update");
         }
     }
 }

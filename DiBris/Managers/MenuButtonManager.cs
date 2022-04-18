@@ -1,8 +1,8 @@
-﻿using System;
-using Zenject;
-using DiBris.UI;
-using BeatSaberMarkupLanguage;
+﻿using BeatSaberMarkupLanguage;
 using BeatSaberMarkupLanguage.MenuButtons;
+using DiBris.UI;
+using System;
+using Zenject;
 
 namespace DiBris.Managers
 {
@@ -14,18 +14,26 @@ namespace DiBris.Managers
 
         public MenuButtonManager(BriFlowCoordinator briFlowCoordinator, MainFlowCoordinator mainFlowCoordinator)
         {
-            _briFlowCoordinator = briFlowCoordinator;
-            _mainFlowCoordinator = mainFlowCoordinator;
-            _menuButton = new MenuButton(nameof(DiBris), ShowFlow);
+            this._briFlowCoordinator = briFlowCoordinator;
+            this._mainFlowCoordinator = mainFlowCoordinator;
+            this._menuButton = new MenuButton(nameof(DiBris), this.ShowFlow);
         }
 
-        private void ShowFlow() => _mainFlowCoordinator.PresentFlowCoordinator(_briFlowCoordinator);
-        public void Initialize() => MenuButtons.instance.RegisterButton(_menuButton);
+        private void ShowFlow()
+        {
+            this._mainFlowCoordinator.PresentFlowCoordinator(this._briFlowCoordinator);
+        }
+
+        public void Initialize()
+        {
+            MenuButtons.instance.RegisterButton(this._menuButton);
+        }
 
         public void Dispose()
         {
-            if (MenuButtons.IsSingletonAvailable && BSMLParser.IsSingletonAvailable)
-                MenuButtons.instance.UnregisterButton(_menuButton);
+            if (MenuButtons.IsSingletonAvailable && BSMLParser.IsSingletonAvailable) {
+                MenuButtons.instance.UnregisterButton(this._menuButton);
+            }
         }
     }
 }
