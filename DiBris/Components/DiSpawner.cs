@@ -126,6 +126,7 @@ namespace DiBris.Components
                 }
 
                 debrisA.Init(colorType, newPos, noteRot, moveVec, noteScale, __instance.transform.position, __instance.transform.rotation, cutPoint, -cutNormal, (-forceEn * ____fromCenterSpeed + next) * conf.VelocityMultiplier, -torque * conf.RotationMultiplier, fixedLifetimeLength * conf.LifetimeMultiplier);
+                debrisA.transform.localScale *= conf.Scale;
                 __instance.StartCoroutine(this.MultiplyGravity(debrisA, conf.GravityMultiplier, shouldInteract));
 
                 var debrisB = this.DebrisDecorator(cutPoint.y, cutNormal, saberSpeed, saberDir, timeToNextColorNote, moveVec, ____cutDirMultiplier, ____moveSpeedMultiplier, ____rotation, __instance.transform, out var fixedLifetimeLength2, out var next2, out var forceEn2, out var torque2, noteGameplayType);
@@ -134,6 +135,7 @@ namespace DiBris.Components
                 }
 
                 debrisB.Init(colorType, newPos, noteRot, moveVec, noteScale, __instance.transform.position, __instance.transform.rotation, cutPoint, cutNormal, (forceEn2 * ____fromCenterSpeed + next2) * conf.VelocityMultiplier, torque2 * conf.RotationMultiplier, fixedLifetimeLength2 * conf.LifetimeMultiplier);
+                debrisB.transform.localScale *= conf.Scale;
                 __instance.StartCoroutine(this.MultiplyGravity(debrisB, conf.GravityMultiplier, shouldInteract));
             }
             return false;
@@ -208,12 +210,14 @@ namespace DiBris.Components
 
         public void HandleNoteDebrisDidFinish(NoteDebris noteDebris)
         {
+            noteDebris.transform.localScale = Vector3.one;
             noteDebris.didFinishEvent.Remove(this);
             if (this._physicsTable.TryGetValue(noteDebris, out var rigidPhysics)) {
                 var simplePhysics = SimplePhysics(ref rigidPhysics);
                 RigidBody(ref rigidPhysics).isKinematic = false;
                 RigidBody(ref rigidPhysics).useGravity = true;
                 Gravity(ref simplePhysics) = Physics.gravity;
+                _physicsTable.Remove(noteDebris);
             }
             if (this._poolForNoteDebris.TryRemove(noteDebris, out var pool)) {
                 pool.Despawn(noteDebris);
