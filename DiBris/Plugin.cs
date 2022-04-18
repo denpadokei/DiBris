@@ -31,29 +31,21 @@ namespace DiBris
                 Container.BindInstance(config).AsSingle();
             });
 
-            zenjector
-                .Install(Location.Menu, Container =>
-                {
-                    Container.Bind<UIParser>().AsSingle();
-                    Container.BindInterfacesTo<MenuButtonManager>().AsSingle();
-                    Container.Bind<BriMainView>().FromNewComponentAsViewController().AsSingle();
-                    Container.Bind<BriInfoView>().FromNewComponentAsViewController().AsSingle();
-                    Container.Bind<BriProfileView>().FromNewComponentAsViewController().AsSingle();
-                    Container.Bind<BriSettingsView>().FromNewComponentAsViewController().AsSingle();
-                    Container.Bind<BriFlowCoordinator>().FromNewComponentOnNewGameObject().AsSingle();
-                });
+            zenjector.Install(Location.Menu, Container =>
+            {
+                Container.Bind<UIParser>().AsSingle();
+                Container.BindInterfacesTo<MenuButtonManager>().AsSingle();
+                Container.Bind<BriMainView>().FromNewComponentAsViewController().AsSingle();
+                Container.Bind<BriInfoView>().FromNewComponentAsViewController().AsSingle();
+                Container.Bind<BriProfileView>().FromNewComponentAsViewController().AsSingle();
+                Container.Bind<BriSettingsView>().FromNewComponentAsViewController().AsSingle();
+                Container.Bind<BriFlowCoordinator>().FromNewComponentOnNewGameObject().AsSingle();
+            });
 
-            zenjector
-                .Install(Location.Player, Container => 
-                {
-                    Container.Bind<UIParser>().AsSingle();
-                    Container.BindInterfacesTo<MenuButtonManager>().AsSingle();
-                    Container.Bind<BriMainView>().FromNewComponentAsViewController().AsSingle();
-                    Container.Bind<BriInfoView>().FromNewComponentAsViewController().AsSingle();
-                    Container.Bind<BriProfileView>().FromNewComponentAsViewController().AsSingle();
-                    Container.Bind<BriSettingsView>().FromNewComponentAsViewController().AsSingle();
-                    Container.Bind<BriFlowCoordinator>().FromNewComponentOnNewGameObject().AsSingle();
-                });
+            zenjector.Install(Location.Player, Container =>
+            {
+                Container.BindInterfacesAndSelfTo<DiSpawner>().AsSingle();
+            });
         }
 
         [OnEnable]

@@ -21,7 +21,7 @@ namespace DiBris.UI
         #region Injections
 
         [Inject]
-        protected readonly TweeningManager _tweeningManager = null!;
+        protected readonly TimeTweeningManager _tweeningManager = null!;
 
         [Inject]
         protected readonly ProfileManager _profileManager = null!;
