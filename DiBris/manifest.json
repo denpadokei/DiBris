@@ -2,12 +2,12 @@
   "$schema": "https://raw.githubusercontent.com/bsmg/BSIPA-MetadataFileSchema/master/Schema.json",
   "id": "DiBris",
   "name": "DiBris",
-  "author": "Auros",
-  "version": "1.2.1",
+  "author": "denpadokei",
+  "version": "2.0.0",
   "description": "Customize your debris in Beat Saber!",
-  "gameVersion": "1.21.0",
+  "gameVersion": "1.30.2",
   "dependsOn": {
-    "BSIPA": "^4.2.2",
+    "BSIPA": "^4.3.0",
     "SiraUtil": "^3.0.5",
     "BeatSaberMarkupLanguage": "^1.5.0"
   },
