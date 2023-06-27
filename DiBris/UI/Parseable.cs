@@ -6,8 +6,10 @@ namespace DiBris.UI
 {
     internal abstract class Parseable : IRefreshable
     {
-        [UIValue("name")]
+        
         public abstract string Name { get; }
+        [UIValue("name")]
+        public string TabName => this.Name;
         public abstract string ContentPath { get; }
 
         [UIParams]
