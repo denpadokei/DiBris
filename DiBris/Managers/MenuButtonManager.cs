@@ -31,8 +31,10 @@ namespace DiBris.Managers
 
         public void Dispose()
         {
-            if (MenuButtons.IsSingletonAvailable && BSMLParser.IsSingletonAvailable) {
+            try {
                 MenuButtons.instance.UnregisterButton(this._menuButton);
+            }
+            catch {
             }
         }
     }
